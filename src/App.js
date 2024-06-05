@@ -1,41 +1,65 @@
 import { useState } from "react";
 
 function App() {
+  const initialNotes = [];
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [notes, setNotes] = useState(initialNotes);
+  
+  function handleReset(e) {
+    e.preventDefault();
+    setTitle('');
+    setContent('');
+  }
 
   function handleSubmission(e) {
-	e.preventDefault();
-	setTitle(title)
+    e.preventDefault();
+
+    if (!title || !content) return;
+
+    const id = crypto.randomUUID();
+    const newNote = {
+      id,
+      title,
+      content
+    }
+
+    setNotes(notes => [...notes, newNote]);
+    handleReset(e);
+  }
+
+  function handleResetAll(e) {
+    e.preventDefault();
+    setNotes([]);
   }
 
   return (
     <div className="app">
       <form className="form">
         <div className="inputs">
-          <input className="title" type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
-          <textarea className="content" type="text"  placeholder="Content" onChange={(e) => setContent(e.target.value)}></textarea>
+          <input className="title" value={title} type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
+          <textarea className="content" value={content} type="text"  placeholder="Content" onChange={(e) => setContent(e.target.value)}></textarea>
         </div>
         <div className="actions">
           <button onClick={handleSubmission}>Submit</button>
-          <button>Reset</button>
-          <button>Reset all</button>
+          <button onClick={handleReset}>Reset</button>
+          <button onClick={handleResetAll}>Reset all</button>
         </div>
       </form>
 	  <div className="notes-list">
-		<Note title={title} content={content} />
+      {notes.map(note => <Note note={note} key={note.id} />)}
 	  </div>
     </div>
   );
 }
 
-function Note({title, content}) {
+function Note({note}) {
 	return (
 		<div className="note">
 			<span className="note-close">X</span>
 			<div>
-				<h2>{title}</h2>
-				<p>{content}</p>
+				<h2>{note.title}</h2>
+				<p>{note.content}</p>
 			</div>
 		</div>
 	)

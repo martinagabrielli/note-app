@@ -30,6 +30,10 @@ button {
   margin: 0 .5rem;
 }
 
+.notes-list {
+  display: flex;
+}
+
 .note {
   width: 13rem;
   height: 8rem;
