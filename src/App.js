@@ -33,6 +33,10 @@ function App() {
     setNotes([]);
   }
 
+  function handleNoteCloseClick(id) {
+    setNotes(notes => notes.filter(note => note.id !== id));
+  }
+
   return (
     <div className="app">
       <form className="form">
@@ -47,16 +51,16 @@ function App() {
         </div>
       </form>
 	  <div className="notes-list">
-      {notes.map(note => <Note note={note} key={note.id} />)}
+      {notes.map(note => <Note onNoteCloseClick={handleNoteCloseClick}  note={note} key={note.id} />)}
 	  </div>
     </div>
   );
 }
 
-function Note({note}) {
+function Note({note, onNoteCloseClick}) {
 	return (
 		<div className="note">
-			<span className="note-close">X</span>
+			<span className="note-close" onClick={() => onNoteCloseClick(note.id)}>X</span>
 			<div>
 				<h2>{note.title}</h2>
 				<p>{note.content}</p>
